@@ -1,47 +1,47 @@
-import fs from "node:fs/promises";
+import fs from 'node:fs/promises';
 
-const databasePath = new URL("../db.json", import.meta.url);
+const databasePath = new URL('../db.json', import.meta.url);
 
 export class Database {
-  constructor() {
-    fs.readFile(databasePath, "utf-8")
-      .then((data) => {
-        this.#database = JSON.parse(data);
-      })
-      .catch(() => {
-        this.#persist();
-      });
-  }
+	constructor() {
+		fs.readFile(databasePath, 'utf-8')
+			.then((data) => {
+				this.#database = JSON.parse(data);
+			})
+			.catch(() => {
+				this.#persist();
+			});
+	}
 
-  #database = {};
+	#database = {};
 
-  #persist() {
-    fs.writeFile(databasePath, JSON.stringify(this.#database));
-  }
+	#persist() {
+		fs.writeFile(databasePath, JSON.stringify(this.#database));
+	}
 
-  select(table, search) {
-    let data = this.#database[table] ?? [];
+	select(table, search) {
+		let data = this.#database[table] ?? [];
 
-    if (search) {
-      data = data.filter((row) => {
-        return Object.entries(search).some(([key, value]) => {
-          return row[key].toLowerCase().includes(value.toLowerCase());
-        });
-      });
-    }
+		if (search) {
+			data = data.filter((row) => {
+				return Object.entries(search).some(([key, value]) => {
+					return row[key].toLowerCase().includes(value.toLowerCase());
+				});
+			});
+		}
 
-    return data;
-  }
+		return data;
+	}
 
-  insert(table, data) {
-    if (Array.isArray(this.#database[table])) {
-      this.#database[table].push(data);
-    } else {
-      this.#database[table] = [data];
-    }
+	insert(table, data) {
+		if (Array.isArray(this.#database[table])) {
+			this.#database[table].push(data);
+		} else {
+			this.#database[table] = [data];
+		}
 
-    this.#persist();
+		this.#persist();
 
-    return data;
-  }
+		return data;
+	}
 }
