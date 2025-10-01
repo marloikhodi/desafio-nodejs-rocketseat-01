@@ -69,7 +69,6 @@ export const routes = [
 			return res.writeHead(204).end();
 		},
 	},
-
 	{
 		method: 'DELETE',
 		path: buildRoutePath('/tasks/:id'),
@@ -81,6 +80,23 @@ export const routes = [
 			}
 			
 			database.delete('tasks', id);
+
+			return res.writeHead(204).end();
+		},
+	},
+	{
+		method: 'PATCH',
+		path: buildRoutePath('/tasks/:id/complete'),
+		handler: (req, res) => {
+			const { id } = req.params;
+
+			if (!database.exists('tasks', id)) {
+				return res.writeHead(404).end('Task not found');
+			}
+			
+			database.update('tasks', id, {
+				completed_at: currentDateTime(),
+			});
 
 			return res.writeHead(204).end();
 		},
