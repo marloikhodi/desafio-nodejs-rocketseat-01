@@ -1,12 +1,1 @@
-{
-	"tasks": [
-		{
-			"id": "b86252be-146f-4ae5-91d8-6a91ce46f5cc",
-			"title": "Primeiro titulo falso",
-			"description": "Primeiro descrição falsa",
-			"completed_at": null,
-			"created_at": "01/10/2025, 15:45:40",
-			"updated_at": "01/10/2025, 15:45:40"
-		}
-	]
-}
+{"tasks":[]}

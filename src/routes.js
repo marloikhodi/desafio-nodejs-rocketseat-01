@@ -56,6 +56,10 @@ export const routes = [
 			const { id } = req.params;
 			const { title, description } = req.body;
 
+			if (!database.exists('tasks', id)) {
+				return res.writeHead(404).end('Task not found');
+			}
+
 			database.update('tasks', id, {
 				title,
 				description,
@@ -72,6 +76,10 @@ export const routes = [
 		handler: (req, res) => {
 			const { id } = req.params;
 
+			if (!database.exists('tasks', id)) {
+				return res.writeHead(404).end('Task not found');
+			}
+			
 			database.delete('tasks', id);
 
 			return res.writeHead(204).end();

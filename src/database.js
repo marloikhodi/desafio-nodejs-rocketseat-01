@@ -19,6 +19,10 @@ export class Database {
 		fs.writeFile(databasePath, JSON.stringify(this.#database));
 	}
 
+	exists(table, id) {
+		return this.#database[table].some((row) => row.id === id) ?? false;
+	}
+
 	insert(table, data) {
 		if (Array.isArray(this.#database[table])) {
 			this.#database[table].push(data);
