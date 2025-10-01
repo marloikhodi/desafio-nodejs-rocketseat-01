@@ -3,27 +3,9 @@ import { Database } from './database.js';
 import { buildRoutePath } from './utils/build-route-path.js';
 
 const database = new Database();
-const currentDateTime = new Date().toLocaleString('pt-br');
+const currentDateTime = () => new Date().toLocaleString('pt-br');
 
 export const routes = [
-	{
-		method: 'GET',
-		path: buildRoutePath('/tasks'),
-		handler: (req, res) => {
-			const { search } = req.query;
-			const tasks = database.select(
-				'tasks',
-				search
-					? {
-							title: search,
-							description: search,
-						}
-					: null,
-			);
-			return res.end(JSON.stringify(tasks));
-		},
-	},
-
 	{
 		method: 'POST',
 		path: buildRoutePath('/tasks'),
@@ -39,12 +21,60 @@ export const routes = [
 				title,
 				description,
 				completed_at: null,
-				created_at: currentDateTime,
-				updated_at: currentDateTime,
+				created_at: currentDateTime(),
+				updated_at: currentDateTime(),
 			};
 
 			database.insert('tasks', task);
+
 			return res.writeHead(201).end();
+		},
+	},
+	{
+		method: 'GET',
+		path: buildRoutePath('/tasks'),
+		handler: (req, res) => {
+			const { search } = req.query;
+
+			const tasks = database.select(
+				'tasks',
+				search
+					? {
+							title: search,
+							description: search,
+						}
+					: null,
+			);
+
+			return res.end(JSON.stringify(tasks));
+		},
+	},
+	{
+		method: 'PUT',
+		path: buildRoutePath('/tasks/:id'),
+		handler: (req, res) => {
+			const { id } = req.params;
+			const { title, description } = req.body;
+
+			database.update('tasks', id, {
+				title,
+				description,
+				updated_at: currentDateTime(),
+			});
+
+			return res.writeHead(204).end();
+		},
+	},
+
+	{
+		method: 'DELETE',
+		path: buildRoutePath('/tasks/:id'),
+		handler: (req, res) => {
+			const { id } = req.params;
+
+			database.delete('tasks', id);
+
+			return res.writeHead(204).end();
 		},
 	},
 ];
