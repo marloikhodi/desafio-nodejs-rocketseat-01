@@ -1,7 +1,6 @@
 import fs from "node:fs/promises";
 
 const databasePath = new URL("../db.json", import.meta.url);
-const currentDateTime = new Date().toLocaleString("pt-br");
 
 export class Database {
   constructor() {
@@ -18,5 +17,31 @@ export class Database {
 
   #persist() {
     fs.writeFile(databasePath, JSON.stringify(this.#database));
+  }
+
+  select(table, search) {
+    let data = this.#database[table] ?? [];
+
+    if (search) {
+      data = data.filter((row) => {
+        return Object.entries(search).some(([key, value]) => {
+          return row[key].toLowerCase().includes(value.toLowerCase());
+        });
+      });
+    }
+
+    return data;
+  }
+
+  insert(table, data) {
+    if (Array.isArray(this.#database[table])) {
+      this.#database[table].push(data);
+    } else {
+      this.#database[table] = [data];
+    }
+
+    this.#persist();
+
+    return data;
   }
 }
