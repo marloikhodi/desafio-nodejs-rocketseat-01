@@ -23,5 +23,8 @@
 	"homepage": "https://github.com/marloikhodi/desafio-nodejs-rocketseat-01#readme",
 	"devDependencies": {
 		"@biomejs/biome": "2.2.4"
+	},
+	"dependencies": {
+		"csv-parse": "^6.1.0"
 	}
 }
