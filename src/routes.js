@@ -96,6 +96,7 @@ export const routes = [
 			
 			database.update('tasks', id, {
 				completed_at: currentDateTime(),
+				updated_at: currentDateTime()
 			});
 
 			return res.writeHead(204).end();
